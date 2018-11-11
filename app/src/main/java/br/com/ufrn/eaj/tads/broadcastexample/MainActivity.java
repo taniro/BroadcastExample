@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -14,7 +15,7 @@ import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
 
-    BroadcastReceiver meu_receiver = new TesteReceiverAPI();
+    BroadcastReceiver meu_receiver = new ReceiverDinamico();
 
 
     @Override
@@ -23,7 +24,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
 
-        registerReceiver(meu_receiver, new IntentFilter("BANG"));
+        LocalBroadcastManager.getInstance(this).registerReceiver(meu_receiver, new IntentFilter("BANG"));
 
         // Solicita as permissões
         String[] permissoes = new String[]{
@@ -34,24 +35,21 @@ public class MainActivity extends AppCompatActivity {
         PermissionUtils.validate(this, 0, permissoes);
     }
 
-    public void onClickEstatico( View v){
-
-        Intent i = new Intent("BINGO");
-        sendBroadcast(i);
-        Toast.makeText(this, "Intent enviada!", Toast.LENGTH_SHORT).show();
-    }
-
     public void onClickDinamico( View v){
 
         Intent i = new Intent("BANG");
-        sendBroadcast(i);
+        LocalBroadcastManager.getInstance(this).sendBroadcast(i);
         Toast.makeText(this, "Intent enviada  por API!", Toast.LENGTH_SHORT).show();
+    }
+
+    public void fechar(View v){
+        finish();
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        unregisterReceiver(meu_receiver);
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(meu_receiver);
     }
 
     @Override

@@ -9,24 +9,18 @@ import android.telephony.SmsMessage;
 import android.util.Log;
 import android.widget.Toast;
 
-public class ReceberSMS extends BroadcastReceiver {
+public class ReceiverReadSMS extends BroadcastReceiver {
 
     final SmsManager sms = SmsManager.getDefault();
-
 
     @Override
     public void onReceive(Context context, Intent intent) {
         Log.i("Script", "SMS recebida!!");
         // Retrieves a map of extended data from the intent.
-
         final Bundle bundle = intent.getExtras();
-
         try {
-
             if (bundle != null) {
-
                 final Object[] pdusObj = (Object[]) bundle.get("pdus");
-
                 for (int i = 0; i < pdusObj.length; i++) {
 
                     SmsMessage currentMessage = SmsMessage.createFromPdu((byte[]) pdusObj[i]);
